@@ -1,0 +1,137 @@
+{
+  "$schema": "https://raw.githubusercontent.com/sourcegraph/sourcegraph/master/shared/src/schema/extension.schema.json",
+  "name": "pascal",
+  "description": "Provides search-based code intelligence for Pascal using the Sourcegraph search API",
+  "private": true,
+  "sideEffects": false,
+  "publisher": "sourcegraph",
+  "version": "0.0.0-DEVELOPMENT",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "github:sourcegraph/code-intel-extensions",
+    "directory": "template"
+  },
+  "categories": [
+    "Programming languages"
+  ],
+  "tags": [
+    "fuzzy"
+  ],
+  "main": "dist/extension.js",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=v14.19.2"
+  },
+  "browserslist": [
+    "last 1 Chrome versions",
+    "last 1 Firefox versions",
+    "last 1 Edge versions",
+    "last 1 Safari versions"
+  ],
+  "activationEvents": [
+    "onLanguage:pascal"
+  ],
+  "scripts": {
+    "build": "../node_modules/.bin/tsc -b . && ../node_modules/.bin/parcel build --out-file extension.js src/extension.ts",
+    "test": "../node_modules/.bin/nyc --reporter=lcov mocha '**/*.test.ts'",
+    "symlink-package": "../node_modules/.bin/mkdirp dist && ../node_modules/.bin/lnfs ./package.json ./dist/package.json",
+    "serve": "yarn run symlink-package && ../node_modules/.bin/parcel serve --no-hmr --out-file dist/extension.js src/extension.ts",
+    "sourcegraph:prepublish": "yarn run build",
+    "publish": "yarn -s && src -config \"${SRC_CONFIG}\" ext publish -git-head \"${BUILDKITE_COMMIT}\""
+  },
+  "contributes": {
+    "menus": {
+      "panel/toolbar": [
+        {
+          "action": "mixPreciseAndSearchBasedReferences.toggle",
+          "when": "panel.activeView.id == 'references' && !config.codeIntel.disableSearchBased"
+        }
+      ],
+      "hover": [
+        {
+          "action": "findImplementations",
+          "when": "resource.language == 'pascal' && get(context, `implementations_${resource.language}`) && (goToDefinition.showLoading || goToDefinition.url || goToDefinition.error)"
+        }
+      ]
+    },
+    "actions": [
+      {
+        "id": "mixPreciseAndSearchBasedReferences.toggle",
+        "command": "updateConfiguration",
+        "title": "${!!config.codeIntel.mixPreciseAndSearchBasedReferences && \"Hide search-based results when precise results are available\" || \"Mix precise and search-based results\"}",
+        "commandArguments": [
+          [
+            "codeIntel.mixPreciseAndSearchBasedReferences"
+          ],
+          "${!config.codeIntel.mixPreciseAndSearchBasedReferences}",
+          null,
+          "json"
+        ],
+        "actionItem": {
+          "label": "${!!config.codeIntel.mixPreciseAndSearchBasedReferences && \"Hide search-based results when precise results are available\" || \"Mix precise and search-based results\"}"
+        }
+      },
+      {
+        "id": "findImplementations",
+        "title": "Find implementations",
+        "command": "open",
+        "commandArguments": [
+          "${get(context, 'implementations_pascal') && get(context, 'panel.url') && sub(get(context, 'panel.url'), 'panelID', 'implementations_pascal') || 'noop'}"
+        ],
+        "actionItem": {
+          "label": "Find implementations"
+        }
+      }
+    ],
+    "configuration": {
+      "title": "Search-based code intelligence settings",
+      "properties": {
+        "codeIntel.lsif": {
+          "description": "Whether to use pre-computed LSIF data for code intelligence (such as hovers, definitions, and references). See https://docs.sourcegraph.com/code_intelligence/explanations/precise_code_intelligence.",
+          "type": "boolean"
+        },
+        "codeIntel.disableSearchBased": {
+          "description": "Never fall back to search-based code intelligence.",
+          "type": "boolean"
+        },
+        "codeIntel.traceExtension": {
+          "description": "Whether to enable trace logging on the extension.",
+          "type": "boolean"
+        },
+        "codeIntel.disableRangeQueries": {
+          "description": "Whether to fetch multiple precise definitions and references on hover.",
+          "type": "boolean"
+        },
+        "codeIntel.mixPreciseAndSearchBasedReferences": {
+          "description": "Whether to supplement precise references with search-based results.",
+          "type": "boolean"
+        },
+        "basicCodeIntel.includeForks": {
+          "description": "Whether to include forked repositories in search results.",
+          "type": "boolean"
+        },
+        "basicCodeIntel.includeArchives": {
+          "description": "Whether to include archived repositories in search results.",
+          "type": "boolean"
+        },
+        "basicCodeIntel.globalSearchesEnabled": {
+          "description": "Whether to run global searches over all repositories. On instances with many repositories, this can lead to issues such as: low quality results, slow response times, or significant load on the Sourcegraph instance. Defaults to true.",
+          "type": "boolean"
+        },
+        "basicCodeIntel.indexOnly": {
+          "description": "Whether to use only indexed requests to the search API.",
+          "type": "boolean"
+        },
+        "basicCodeIntel.unindexedSearchTimeout": {
+          "description": "The timeout (in milliseconds) for un-indexed search requests.",
+          "type": "number"
+        }
+      }
+    }
+  },
+  "title": "Pascal code intelligence",
+  "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAYAAABccqhmAAAACXBIWXMAAAsTAAALEwEAmpwYAAASCElEQVR4nO3d2XNT993H8c/RvsuWd2yDF0gMFJISJzhMmkJJoaTMcJE2k4tOZzK56G3/hOc/6N+Q5oJOJ2kaJhMCSZjQpAkuS8wWgxeMjYwtW5Yt29q358IPFLB0zpEl2SfP9/OayXQSZPmU39FbZ/0d5ezZQAFEJJJpqxeAiLYOA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANAJBgDQCQYA0AkGANA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"
+}
