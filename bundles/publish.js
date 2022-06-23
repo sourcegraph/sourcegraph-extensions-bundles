@@ -97,12 +97,8 @@ async function publishExtension(extensionDirectory) {
       },
       (res) => {
         const chunks = [];
-
         res.on("data", (data) => chunks.push(data));
-
-        res.on("end", () => {
-          resolve(JSON.parse(Buffer.concat(chunks)));
-        });
+        res.on("end", () => resolve(JSON.parse(Buffer.concat(chunks))));
       }
     );
 
@@ -112,13 +108,15 @@ async function publishExtension(extensionDirectory) {
   });
 
   try {
-    if (typeof JSON.parse(result) === "string") {
+    if (Array.isArray(result?.errors) && result.errors.length > 0) {
+      console.log(result.errors[0].message);
+    } else if (typeof JSON.parse(result) === "string") {
       // Could be an error message (e.g. "Private mode requires authentication")
       console.log(result);
+    } else {
+      console.log(`Published extension ${extensionID} from directory: ${extensionDirectory}`);
     }
   } catch {
     // noop
   }
-
-  console.log(`Published extension ${extensionID} from directory: ${extensionDirectory}`);
 }
