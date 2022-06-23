@@ -5,6 +5,7 @@
   "repository": "https://github.com/sourcegraph/code-intel-extensions-bundles.git",
   "license": "ISC",
   "scripts": {
-    "build": "node index.js"
+    "build": "node index.js",
+    "publish": "node bundles/publish.js"
   }
 }
