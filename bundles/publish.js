@@ -24,10 +24,8 @@ const sgurl = new URL(SRC_ENDPOINT);
 })();
 
 function determineExtensionDirectories() {
-  const fixedFiles = ["package.json", "publish.js", "README.md"];
-
-  const files = fs.readdirSync(__dirname);
-  return files.filter((file) => !fixedFiles.includes(file));
+  const content = fs.readdirSync(__dirname, { withFileTypes: true });
+  return content.filter((item) => item.isDirectory() && item.name.startsWith("sourcegraph-")).map((item) => item.name);
 }
 
 async function publishExtensions(extensionDirectories) {
@@ -110,9 +108,6 @@ async function publishExtension(extensionDirectory) {
   try {
     if (Array.isArray(result?.errors) && result.errors.length > 0) {
       console.log(result.errors[0].message);
-    } else if (typeof JSON.parse(result) === "string") {
-      // Could be an error message (e.g. "Private mode requires authentication")
-      console.log(result);
     } else {
       console.log(`Published extension ${extensionID} from directory: ${extensionDirectory}`);
     }
