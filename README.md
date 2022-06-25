@@ -18,5 +18,5 @@ Contains a directory with Sourcegraph code intelligence extensions bundles for c
    - NOTE: You do _not_ need to have `src-cli` installed for this script to work.
 
 #### Update the Extension Bundles
-1. Update the `revision.txt` file with the target revision of [code-intel-extensions repo](https://github.com/sourcegraph/code-intel-extensions]).
+1. Update the `revision.txt` file with the target revision of [code-intel-extensions repo](https://github.com/sourcegraph/code-intel-extensions).
 2. Run `npm run build`.
