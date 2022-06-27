@@ -1,0 +1,11 @@
+{
+  "name": "code-intel-extensions-bundles",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/sourcegraph/code-intel-extensions-bundles.git",
+  "license": "ISC",
+  "scripts": {
+    "build": "node index.js",
+    "publish": "node bundles/publish.js"
+  }
+}
