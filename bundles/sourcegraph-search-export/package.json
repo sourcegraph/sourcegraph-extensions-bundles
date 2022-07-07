@@ -1,0 +1,134 @@
+{
+  "$schema": "https://raw.githubusercontent.com/sourcegraph/sourcegraph/main/client/shared/src/schema/extension.schema.json",
+  "activationEvents": [
+    "*"
+  ],
+  "browserslist": [
+    "last 1 Chrome versions",
+    "last 1 Firefox versions",
+    "last 1 Edge versions",
+    "last 1 Safari versions"
+  ],
+  "bugs": {
+    "url": "https://github.com/sourcegraph/sourcegraph-search-export/issues"
+  },
+  "categories": [
+    "Reports and stats"
+  ],
+  "contributes": {
+    "actions": [
+      {
+        "actionItem": {
+          "description": "Download CSV file",
+          "label": "Export to CSV"
+        },
+        "category": "Sourcegraph",
+        "command": "searchExport.exportSearchResultsToCSV",
+        "commandArguments": [
+          "${get(context, 'searchQuery')}",
+          "${get(context, 'patternType')}"
+        ],
+        "id": "searchExport.export",
+        "title": "Export search results"
+      }
+    ],
+    "configuration": {
+      "properties": {
+        "searchExport.maxMatchContentLength": {
+          "default": 200,
+          "description": "Maximum length of individual search match content ('Search matches' column).",
+          "type": "integer"
+        },
+        "searchExport.searchPatternType": {
+          "default": "literal",
+          "description": "Search pattern type to use. Starting with Sourcegraph 3.29, this is automatically in sync with the search bar and is not necessary to configure.",
+          "enum": [
+            "literal",
+            "regexp",
+            "structural"
+          ],
+          "type": "string"
+        }
+      },
+      "title": "Search export settings"
+    },
+    "menus": {
+      "search/results/toolbar": [
+        {
+          "action": "searchExport.export"
+        }
+      ]
+    }
+  },
+  "dependencies": {
+    "js-base64": "^2.5.2"
+  },
+  "description": "Export search results as CSV",
+  "devDependencies": {
+    "@sourcegraph/extension-api-stubs": "^0.2.2",
+    "@sourcegraph/tslint-config": "^13.3.0",
+    "@types/js-base64": "^2.3.1",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^10.14.10",
+    "lnfs-cli": "^2.1.0",
+    "mkdirp": "^0.5.1",
+    "mocha": "^5.2.0",
+    "nyc": "^15.0.0",
+    "parcel-bundler": "^1.12.3",
+    "prettier": "^1.18.2",
+    "source-map-support": "^0.5.12",
+    "sourcegraph": "^23.0.1",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.18.0",
+    "tslint-language-service": "^0.9.9",
+    "typescript": "^3.5.2"
+  },
+  "extensionID": "sourcegraph/search-export",
+  "gitHead": "9e8a1883dd490718d53250b1803972e0413dc2f2",
+  "license": "MIT",
+  "main": "dist/extension.js",
+  "name": "search-export",
+  "nyc": {
+    "exclude": [
+      "**/*.test.ts?(x)",
+      "**/*.d.ts",
+      "**/*.js"
+    ],
+    "extension": [
+      ".tsx",
+      ".ts"
+    ],
+    "include": [
+      "src/**/*.ts?(x)"
+    ]
+  },
+  "publisher": "sourcegraph",
+  "readme": "# Sourcegraph search results CSV export extension\n\n[![master build status](https://img.shields.io/github/workflow/status/sourcegraph/sourcegraph-search-export/build/master?logo=github)](https://github.com/sourcegraph/sourcegraph-search-export/actions?query=branch%3Amaster)\n[![codecov](https://codecov.io/gh/sourcegraph/sourcegraph-search-export/branch/master/graph/badge.svg)](https://codecov.io/gh/sourcegraph/sourcegraph-search-export)\n\nA [Sourcegraph extension](https://docs.sourcegraph.com/extensions) to export a list of search results to CSV.\n\n[**🗃️ Source code**](https://github.com/sourcegraph/sourcegraph-search-export)\n\n[**➕ Add to Sourcegraph**](https://sourcegraph.com/extensions/sourcegraph/search-export) (for self-hosted instances: visit the **Extensions** page)\n\n## Features\n\n-   Adds a **Sourcegraph: Export search results** button on top of the Sourcegraph search results pages\n![image](https://user-images.githubusercontent.com/68532117/138749863-2d5bb850-5707-4d3f-9090-ef73236d7053.png)\n## Usage\n\n1. Enable the extension at https://sourcegraph.com/extensions/sourcegraph/search-export or on the **Extensions** page of your self-hosted instance.\n1. Perform a search query on Sourcegraph.\n1. Press the **Sourcegraph: Export search results** button above the list of search results. (Note: This may take a while for large result sets. The extension is not optimized for streaming or paginating results.)\n1. Click `Download CSV` from the pop-up window to download the CSV file.\n![image](https://user-images.githubusercontent.com/68532117/138749809-9c074bd8-d9f2-4998-a84e-f6a3b0cfd4aa.png)\n\n## Configuration\n\nThe extension can be configured through JSON in user, organization or global settings.\n\n```jsonc\n{\n    // The maximum length of the preview for each match (\"Search matches\" column).\n    // By default, the limit is 200.\n    \"searchExport.maxMatchContentLength\": 50\n}\n```\n\n## Development\n\n1. Run `yarn \u0026\u0026 yarn run serve` and keep the Parcel bundler process running.\n1. [Sideload the extension](https://docs.sourcegraph.com/extensions/authoring/local_development) (at the URL http://localhost:1234 by default) on your Sourcegraph instance or Sourcegraph.com.\n\nWhen you edit a source file in your editor, Parcel will recompile the extension. Reload the Sourcegraph web page to use run the updated extension.\n\n## Release\n\nRun `src extension publish` using the [Sourcegraph `src` CLI](https://github.com/sourcegraph/src-cli).\n",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sourcegraph/sourcegraph-search-export.git"
+  },
+  "scripts": {
+    "build": "parcel build --out-file extension.js src/extension.ts",
+    "cover": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' nyc --require ts-node/register --require source-map-support/register --all mocha --opts mocha.opts --timeout 10000",
+    "prettier": "prettier 'src/**/*.{js?(on),ts}' --write --list-different",
+    "prettier:check": "yarn run prettier -- --write=false",
+    "serve": "yarn run symlink-package \u0026\u0026 parcel serve --no-hmr --no-source-maps --out-file extension.js src/extension.ts",
+    "sourcegraph:prepublish": "yarn run build",
+    "symlink-package": "mkdirp dist \u0026\u0026 lnfs ./package.json ./dist/package.json",
+    "test": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' mocha --require ts-node/register --require source-map-support/register --opts mocha.opts",
+    "tslint": "tslint -p tsconfig.json './src/**/*.ts'",
+    "tslint:fix": "yarn run tslint -- --fix",
+    "typecheck": "tsc -p tsconfig.json",
+    "watch:build": "tsc -p tsconfig.dist.json -w",
+    "watch:test": "yarn run test -- -w",
+    "watch:typecheck": "tsc -p tsconfig.json -w"
+  },
+  "tags": [
+    "search",
+    "results",
+    "export"
+  ],
+  "url": "https://sourcegraph.com/-/static/extension/13228-sourcegraph-search-export.js?cf8snwqcmyxk--sourcegraph-search-export",
+  "version": "0.0.0-development"
+}

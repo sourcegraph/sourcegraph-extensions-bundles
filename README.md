@@ -1,6 +1,6 @@
 # Code intel extension bundles
 
-Contains a directory with Sourcegraph code intelligence extensions bundles for customers to publish to their private registries and a script to update that bundles.
+Contains a directory with Sourcegraph code intelligence and default extensions bundles for customers to publish to their private registries and a script to update that bundles.
 
 ### Steps
 
@@ -18,5 +18,6 @@ Contains a directory with Sourcegraph code intelligence extensions bundles for c
    - NOTE: You do _not_ need to have `src-cli` installed for this script to work.
 
 #### Update the Extension Bundles
-1. Update the `revision.txt` file with the target revision of [code-intel-extensions repo](https://github.com/sourcegraph/code-intel-extensions).
+1. Update the [`default-extensions.txt`](https://github.com/sourcegraph/code-intel-extensions-bundles/blob/main/default-extensions.txt) file with the extension IDs you want to bundle (code-intel extensions are bundled by default).
 2. Run `npm run build`.
+3. Publish new release. Version tag should be the same as the current Sourcegraph version.
