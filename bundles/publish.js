@@ -26,14 +26,16 @@ const sgurl = new URL(SRC_ENDPOINT);
 function determineExtensionDirectories() {
   const content = fs.readdirSync(__dirname, { withFileTypes: true });
 
-  return content.filter((item) => {
-    if (item.isDirectory()) {
-      const items = fs.readdirSync(path.join(__dirname, item.name));
-      return items.includes("package.json") && items.includes(`${item.name}.js`);
-    }
+  return content
+    .filter((item) => {
+      if (item.isDirectory()) {
+        const items = fs.readdirSync(path.join(__dirname, item.name));
+        return items.includes("package.json") && items.includes(`${item.name}.js`);
+      }
 
-    return false;
-  });
+      return false;
+    })
+    .map((item) => item.name);
 }
 
 async function publishExtensions(extensionDirectories) {
