@@ -21,10 +21,10 @@
     "actions": [
       {
         "actionItem": {
-          "description": "${(config.git.blame.decorations === 'line' \u0026\u0026 'Show Git blame line annotations for the whole file') || (config.git.blame.decorations === 'file' \u0026\u0026 'Hide Git blame line annotations') || (clientApplication.isSourcegraph \u0026\u0026 experimentalFeatures.enableExtensionsDecorationsColumnView \u0026\u0026 'Show Git blame line annotations for the whole file' || 'Show Git blame line annotations on selected lines')}",
+          "description": "${(config.git.blame.decorations === 'line' \u0026\u0026 'Show Git blame line annotations for the whole file') || (config.git.blame.decorations === 'file' \u0026\u0026 'Hide Git blame line annotations') || 'Show Git blame line annotations on selected lines'}",
           "iconURL": "https://raw.githubusercontent.com/sourcegraph/sourcegraph-git-extras/63dd95962c43b95b3f3a9ea2aa0165d6b38a958c/icon/git_logo.svg?sanitize=true",
           "label": "Blame",
-          "pressed": "((!clientApplication.isSourcegraph || !experimentalFeatures.enableExtensionsDecorationsColumnView) \u0026\u0026 config.git.blame.decorations === 'line') || (config.git.blame.decorations === 'file')"
+          "pressed": "(config.git.blame.decorations === 'line') || (config.git.blame.decorations === 'file')"
         },
         "category": "Git",
         "command": "updateConfiguration",
@@ -32,11 +32,11 @@
           [
             "git.blame.decorations"
           ],
-          "${(config.git.blame.decorations === 'line' \u0026\u0026 'file') || (config.git.blame.decorations === 'file' \u0026\u0026 'none') || (clientApplication.isSourcegraph \u0026\u0026 experimentalFeatures.enableExtensionsDecorationsColumnView \u0026\u0026 'file' || 'line')}",
+          "${(config.git.blame.decorations === 'line' \u0026\u0026 'file') || (config.git.blame.decorations === 'file' \u0026\u0026 'none') || 'line'}",
           null
         ],
         "id": "git.blame.toggle",
-        "title": "${(config.git.blame.decorations === 'line' \u0026\u0026 'Show blame for the whole file') || (config.git.blame.decorations === 'file' \u0026\u0026 'Hide blame') || (clientApplication.isSourcegraph \u0026\u0026 experimentalFeatures.enableExtensionsDecorationsColumnView \u0026\u0026 'Show blame for the whole file' || 'Show blame for selected lines')}"
+        "title": "${(config.git.blame.decorations === 'line' \u0026\u0026 'Show blame for the whole file') || (config.git.blame.decorations === 'file' \u0026\u0026 'Hide blame') || 'Show blame for selected lines'}"
       }
     ],
     "configuration": {
@@ -81,7 +81,7 @@
   },
   "description": "A Sourcegraph extension that adds useful features when viewing files in a Git repository on Sourcegraph, GitHub, GitLab, and other supported code hosts.",
   "devDependencies": {
-    "@commitlint/cli": "^16.2.4",
+    "@commitlint/cli": "^16.3.0",
     "@commitlint/config-conventional": "^16.2.4",
     "@sourcegraph/prettierrc": "^2.2.0",
     "@sourcegraph/tsconfig": "^4.0.1",
@@ -89,8 +89,8 @@
     "@types/expect": "1.20.4",
     "@types/lodash": "4.14.182",
     "@types/mocha": "9.1.1",
-    "@types/node": "16.11.33",
-    "@types/sinon": "10.0.11",
+    "@types/node": "16.11.47",
+    "@types/sinon": "10.0.13",
     "expect": "^24.1.0",
     "graphql": "^15.4.0",
     "husky": "^4.3.5",
@@ -103,7 +103,7 @@
     "prettier": "^1.19.1",
     "sinon": "^9.2.1",
     "source-map-support": "^0.5.12",
-    "sourcegraph": "^25.6.0",
+    "sourcegraph": "^25.7.0",
     "ts-node": "^8.10.2",
     "tslint": "^5.11.0",
     "typescript": "^4.1.2",
@@ -113,7 +113,7 @@
   "files": [
     "dist"
   ],
-  "gitHead": "22f6326e2585f2bc4db2d3720c6d4b2111908c17",
+  "gitHead": "8b6c128a16059b00a54683f69982bedcba139bef",
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -e $HUSKY_GIT_PARAMS"
@@ -162,6 +162,6 @@
     "author"
   ],
   "title": "Git extras",
-  "url": "https://sourcegraph.com/-/static/extension/15781-sourcegraph-git-extras.js?ckmj8wl9kax4--sourcegraph-git-extras",
+  "url": "https://sourcegraph.com/-/static/extension/16312-sourcegraph-git-extras.js?cmlqbmpj8ob4--sourcegraph-git-extras",
   "version": "0.0.0-DEVELOPMENT"
 }
