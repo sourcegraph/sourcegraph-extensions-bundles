@@ -18884,7 +18884,7 @@ exports.activate = activate;
 
 var _rxjs = require("rxjs");
 
-var _operators = require("rxjs/operators");
+var _operators = require("rxjs");
 
 var sourcegraph = _interopRequireWildcard(require("sourcegraph"));
 
@@ -18965,5 +18965,5 @@ function activate(context) {
     }
   }
 }
-},{"rxjs":"../node_modules/rxjs/_esm5/index.js","rxjs/operators":"../node_modules/rxjs/_esm5/operators/index.js","sourcegraph":"../node_modules/sourcegraph/src/index.js","./blame":"blame.ts"}]},{},["extension.ts"], null)
+},{"rxjs":"../node_modules/rxjs/_esm5/index.js","sourcegraph":"../node_modules/sourcegraph/src/index.js","./blame":"blame.ts"}]},{},["extension.ts"], null)
 //# sourceMappingURL=/sourcegraph-git-extras.js.map

@@ -76,7 +76,7 @@
   },
   "dependencies": {
     "date-fns": "^2.0.0-alpha.24",
-    "rxjs": "^6.6.3",
+    "rxjs": "7.8.2",
     "tagged-template-noop": "^2.1.0"
   },
   "description": "A Sourcegraph extension that adds useful features when viewing files in a Git repository on Sourcegraph, GitHub, GitLab, and other supported code hosts.",
