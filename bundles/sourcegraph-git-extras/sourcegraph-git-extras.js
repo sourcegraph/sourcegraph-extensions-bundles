@@ -18884,7 +18884,7 @@ exports.activate = activate;
 
 var _rxjs = require("rxjs");
 
-var _operators = require("rxjs/operators");
+var _operators = require("rxjs");
 
 var sourcegraph = _interopRequireWildcard(require("sourcegraph"));
 
